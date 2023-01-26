@@ -82,10 +82,11 @@ class DisparityBase(ABC):
         for idx in known_idx:
             errors = []
 
+            array = X[idx, :]
+            stereo = self._get_stereo(array)
             for left, right, line_segments in zip(
                 left_images, right_images, line_segments_collection
             ):
-                stereo = self._get_stereo(X[idx, :])
                 disparity = stereo.compute(left, right)
                 depth = cv2.reprojectImageTo3D(
                     disparity, self._calibrated_camera.Q
@@ -101,6 +102,8 @@ class DisparityBase(ABC):
 
             if error < self._prev_min_error:
                 self._prev_min_error = error
+
+                np.save("disparity-parameters.npy", array)
 
             y[idx] = 1 / error
 
