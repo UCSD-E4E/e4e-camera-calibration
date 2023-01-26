@@ -40,10 +40,11 @@ class DisparityBase(ABC):
         X = self._get_inputs()
         count, _ = X.shape
         y = np.zeros((count, 1))
+        budget = int(float(count) * 0.3)
 
         sherlock = Sherlock(
             n_init=5,
-            budget=float(count) * 0.3,
+            budget=budget,
             surrogate_type="rbfthin_plate-rbf_multiquadric-randomforest-gpy",
             kernel="matern",
             num_restarts=0,
