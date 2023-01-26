@@ -960,7 +960,7 @@ Theano = "^1.0.5"
 type = "git"
 url = "https://github.com/KastnerRG/sherlock.git"
 reference = "feature/poetry"
-resolved_reference = "91328458902b21a63977742f58887b3d88bbf238"
+resolved_reference = "bd0d67f5418bc33389dd1d8ae390062ed9c69798"
 
 [[package]]
 name = "six"
