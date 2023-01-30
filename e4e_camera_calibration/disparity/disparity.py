@@ -39,7 +39,7 @@ class DisparityBase(ABC):
 
         X = self._get_inputs()
         count, _ = X.shape
-        y = np.zeros((count, 1))
+        y = np.zeros((count, 2))
         budget = int(float(count) * 0.3)
 
         sherlock = Sherlock(
@@ -93,20 +93,25 @@ class DisparityBase(ABC):
                     disparity, self._calibrated_camera.Q
                 ).astype(np.float64)
 
-                errors = self._calculate_error(depth, line_segments, square_size)
+                errors.extend(self._calculate_error(depth, line_segments, square_size))
 
             errors = np.array(errors)
-            error = np.sqrt(np.sum(errors) / len(errors))
+            error = np.sqrt(np.sum(errors) / errors.shape[0])
 
             if display_calibration_error:
-                print(error)
+                print(f"Error: {error}, % Error: {error / square_size * 10:.2f}")
 
             if error < self._prev_min_error:
                 self._prev_min_error = error
 
                 np.save("disparity-parameters.npy", array)
 
-            y[idx] = 1 / error
+            if error == 0:
+                y[idx, 0] = 0
+            elif not math.isnan(error) and not math.isinf(error):
+                y[idx, 0] = 1 / error
+            else:
+                y[idx, 0] = 100000
 
     def _calculate_error(
         self, depth: np.ndarray, line_segments: List[np.ndarray], square_size: float
@@ -114,8 +119,11 @@ class DisparityBase(ABC):
         errors = []
 
         for line_segment in line_segments:
+            if len(line_segment) != 2:
+                continue
+
             point1 = self._get_point(depth, line_segment[0])
-            point2 = self._get_point(depth, line_segment[0])
+            point2 = self._get_point(depth, line_segment[1])
 
             dist = np.linalg.norm(point1 - point2)
             errors.append(square_size - dist)
@@ -142,28 +150,30 @@ class DisparityBase(ABC):
         return (a, b, c, d)
 
     def _get_point(self, depth: np.ndarray, point: np.ndarray):
-        floor_point = np.floor(point).astype(int)
-        ceil_point = np.ceil(point).astype(int)
+        # floor_point = np.floor(point).astype(int)
+        # ceil_point = np.ceil(point).astype(int)
 
-        corner1_2d = floor_point
-        corner2_2d = np.array([floor_point[0], ceil_point[1]])
-        corner3_2d = np.array([ceil_point[0], floor_point[1]])
-        corner4_2d = ceil_point
+        # corner1_2d = floor_point
+        # corner2_2d = np.array([floor_point[1], ceil_point[0]])
+        # corner3_2d = np.array([ceil_point[1], floor_point[0]])
+        # corner4_2d = ceil_point
 
-        corner1_3d = depth[corner1_2d[1], corner1_2d[0], :]
-        corner2_3d = depth[corner2_2d[1], corner2_2d[0], :]
-        corner3_3d = depth[corner3_2d[1], corner3_2d[0], :]
-        corner4_3d = depth[corner4_2d[1], corner4_2d[0], :]
+        # corner1_3d = depth[corner1_2d[1], corner1_2d[0], :]
+        # corner2_3d = depth[corner2_2d[1], corner2_2d[0], :]
+        # corner3_3d = depth[corner3_2d[1], corner3_2d[0], :]
+        # corner4_3d = depth[corner4_2d[1], corner4_2d[0], :]
 
-        a, b, c, d = self._get_plane([corner1_3d, corner2_3d, corner3_3d])
+        # a, b, c, d = self._get_plane([corner1_3d, corner2_3d, corner3_3d])
 
-        delta_2d = point - floor_point
-        delta_3d = (corner1_3d - corner4_3d)[:2]
+        # delta_2d = point - floor_point
+        # delta_3d = (corner1_3d - corner4_3d)[:2]
 
-        corner1_3d[:2] += delta_3d * delta_2d
-        corner1_3d[2] = -(a * corner1_3d[0] + b * corner1_3d[1] + d) / c
+        # corner1_3d[:2] += delta_3d * delta_2d
+        # corner1_3d[2] = -(a * corner1_3d[1] + b * corner1_3d[0] + d) / c
 
-        return corner1_3d
+        # return corner1_3d
+
+        return depth[int(point[1]), int(point[0]), :]
 
     def _get_points(self, image: np.ndarray, rows: int, columns: int, criteria):
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -202,7 +212,7 @@ class DisparityBase(ABC):
             second_line = lines[i + 1]
 
             for j, _ in enumerate(first_line):
-                yield [first_line[j], second_line]
+                yield [first_line[j], second_line[j]]
 
     @abstractmethod
     def _get_inputs(self) -> np.ndarray:
