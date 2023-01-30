@@ -1,6 +1,5 @@
 from argparse import ArgumentParser, Namespace
 from commands.cli_command import CliCommand
-from cameras import CAMERA_MAP, str2camera
 from cameras.calibrated_camera_base import CalibratedCameraBase
 from cameras.calibrated_stereo_camera import CalibratedStereoCamera
 from argument_parser_builder import ArgumentParserBuilder, ParsedArguments

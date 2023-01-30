@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, Namespace
 
-from cameras import CAMERA_MAP, str2camera
+from cameras.factory import CAMERA_MAP, str2camera
 from cameras.camera import Camera
 
 
