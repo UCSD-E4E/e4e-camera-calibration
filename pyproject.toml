@@ -10,6 +10,7 @@ numpy = "^1.24.1"
 opencv-python = "^4.7.0"
 opencv-contrib-python = "^4.7.0"
 sherlock = { git = "https://github.com/KastnerRG/sherlock.git", branch = "feature/poetry", markers = "platform_machine == 'x86_64'" }
+matplotlib = "^3.6.3"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"
