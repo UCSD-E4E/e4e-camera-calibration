@@ -5,6 +5,7 @@ import math
 from sherlock import Sherlock
 import cv2
 import numpy as np
+import matplotlib.pyplot as plt
 
 from cameras.calibrated_stereo_camera import CalibratedStereoCamera
 
@@ -15,6 +16,8 @@ class DisparityBase(ABC):
 
         self._calibrated_camera = calibrated_camera
         self._prev_min_error = math.inf
+
+        plt.ion()
 
     def calibrate(
         self,
@@ -105,13 +108,14 @@ class DisparityBase(ABC):
                 self._prev_min_error = error
 
                 np.save("disparity-parameters.npy", array)
+                plt.imshow(disparity)
 
             if error == 0:
                 y[idx, 0] = 0
             elif not math.isnan(error) and not math.isinf(error):
                 y[idx, 0] = 1 / error
             else:
-                y[idx, 0] = 100000
+                y[idx, 0] = 0
 
     def _calculate_error(
         self, depth: np.ndarray, line_segments: List[np.ndarray], square_size: float
@@ -149,7 +153,7 @@ class DisparityBase(ABC):
 
         return (a, b, c, d)
 
-    def _get_point(self, depth: np.ndarray, point: np.ndarray):
+    def _get_point(self, depth: np.ndarray, point: np.ndarray): # TOOD
         # floor_point = np.floor(point).astype(int)
         # ceil_point = np.ceil(point).astype(int)
 
@@ -200,7 +204,7 @@ class DisparityBase(ABC):
             line_points = points[r * columns : (r + 1) * columns, :]
             lines.append(line_points)
 
-        for line in lines:
+        for line in lines: # TODO Bug? Should be rows?
             for i in range(0, columns, 2):
                 yield line[i : i + 2]
 
