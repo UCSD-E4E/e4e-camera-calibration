@@ -1,10 +1,13 @@
 import argparse
 
 from __init__ import __app_name__, __version__
-from commands.cli_command import CliCommand
-from commands.version_command import VersionCommand
-from commands.calibrate_command import CalibrateCommand
-from commands.tune_disparity_command import TuneDisparityCommand
+from e4e_camera_calibration.commands.cli_command import CliCommand
+from e4e_camera_calibration.commands.calibrate_command import CalibrateCommand
+from e4e_camera_calibration.commands.extract_calibration_images import (
+    ExtractCalibrationImagesCommand,
+)
+from e4e_camera_calibration.commands.tune_disparity_command import TuneDisparityCommand
+from e4e_camera_calibration.commands.version_command import VersionCommand
 
 
 class Cli:
@@ -22,6 +25,7 @@ class Cli:
         )
 
         self._subparsers = self._parser.add_subparsers(dest="command")
+        self._add_subparser(ExtractCalibrationImagesCommand())
         self._add_subparser(CalibrateCommand())
         self._add_subparser(TuneDisparityCommand())
         self._add_subparser(VersionCommand())

@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
-from commands.cli_command import CliCommand
-from cameras.calibrated_camera_base import CalibratedCameraBase
-from cameras.calibrated_stereo_camera import CalibratedStereoCamera
+from e4e_camera_calibration.commands.cli_command import CliCommand
+from e4e_camera_calibration.cameras.calibrated_camera_base import CalibratedCameraBase
+from e4e_camera_calibration.cameras.calibrated_stereo_camera import CalibratedStereoCamera
 from argument_parser_builder import ArgumentParserBuilder, ParsedArguments
 
 
@@ -41,7 +41,7 @@ class CalibrateCommand(CliCommand):
             "-m",
             "--max-error",
             type=int,
-            default=0.5,
+            default=0.6,
             help="The maximum calibration error allowed.",
         )
 

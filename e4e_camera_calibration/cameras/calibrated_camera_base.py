@@ -9,8 +9,8 @@ import tarfile
 import cv2
 import numpy as np
 
-from cameras.camera import Camera
-from cameras.stereo_camera import StereoCamera
+from e4e_camera_calibration.cameras.camera import Camera
+from e4e_camera_calibration.cameras.stereo_camera import StereoCamera
 
 
 class CalibratedCameraBase(Camera, ABC):
@@ -165,8 +165,14 @@ class CalibratedCameraBase(Camera, ABC):
     def _load_calibration(self, file: tarfile.TarFile):
         raise NotImplementedError()
 
-    def _load_image(self, file_path: str):
-        return self._camera._load_image(file_path)
+    def _load_image_file(self, file_path: str):
+        return self._camera._load_image_file(file_path)
+
+    def _load_video(self, file_path: str):
+        return self._camera._load_video(file_path)
+
+    def _next_video_frame(self):
+        return self._camera._next_video_frame()
 
     def _preprocess_image(self, image: np.ndarray):
         return self._camera._preprocess_image(image)
@@ -177,6 +183,12 @@ class CalibratedCameraBase(Camera, ABC):
     def _read_numpy_array(self, buffer: io.BufferedReader):
         with io.BytesIO(buffer.read()) as b:
             return np.load(b)
+
+    def _seek_video_file(self, index: int):
+        return self._seek_video_file(index)
+
+    def _write_image_file(self, image: np.ndarray, file_path: str):
+        self._write_image_file(image, file_path)
 
     @abstractmethod
     def _save_calibration(self, file: tarfile.TarFile):

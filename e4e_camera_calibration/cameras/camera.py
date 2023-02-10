@@ -21,6 +21,13 @@ class Camera(ABC):
         self._manufacturer = manufacturer
         self._model = model
         self._serial_number = serial_number
+        self._image_count = 0
+        self._load_from_directory = False
+        self._load_from_video = False
+
+    @property
+    def image_count(self):
+        return self._image_count
 
     @property
     def manufacturer(self):
@@ -42,17 +49,70 @@ class Camera(ABC):
     def serial_number(self):
         return self._serial_number
 
+    def at(self, index: int):
+        self.seek(index)
+        return self.__next__()
+
     def load(self, file_path: str):
         path = Path(file_path)
 
-        if path.is_dir():
+        self._load_from_directory = False
+        self._load_from_video = False
+
+        if self._is_image_file(path):
             self._image_files = self._process_directory(file_path)
+            self._image_count = len(self._image_files)
             self._image_files_idx = 0
+            self._load_from_directory = True
+        elif self._is_video_file(path):
+            self._load_video(file_path)
+            self._load_from_video = True
         else:
             raise NotImplementedError()
 
+    def seek(self, index: int):
+        if self._load_from_directory:
+            self._seek_directory(index)
+        elif self._load_from_video:
+            self._seek_video_file(index)
+        else:
+            raise NotImplementedError()
+
+    def _is_image_file(self, path: Path):
+        return path.is_dir()
+
+    def _is_video_file(self, path: Path):
+        return path.suffix == ".mp4"
+
     @abstractmethod
-    def _load_image(self, file_path: str):
+    def _load_image_file(self, file_path: str):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def _load_video(self, file_path: str):
+        raise NotImplementedError()
+
+    def _next_from_directory(self):
+        if self._image_files_idx < len(self._image_files):
+            file = self._image_files[self._image_files_idx]
+            self._image_files_idx += 1
+
+            image = self._load_image_file(file)
+
+            return self._preprocess_image(image)
+
+        raise StopIteration
+
+    def _next_from_video_file(self):
+        image = self._next_video_frame()
+
+        if image is None:
+            raise StopIteration
+
+        return self._preprocess_image(image)
+
+    @abstractmethod
+    def _next_video_frame(self):
         raise NotImplementedError()
 
     @abstractmethod
@@ -63,16 +123,24 @@ class Camera(ABC):
     def _process_directory(self, file_path: str):
         raise NotImplementedError()
 
+    def _seek_directory(self, index: int):
+        self._image_files_idx = index
+
+    @abstractmethod
+    def _seek_video_file(self, index: int):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def _write_image_file(self, image: np.ndarray, file_path: str):
+        raise NotImplementedError()
+
     def __iter__(self):
         return self
 
     def __next__(self):
-        if self._image_files_idx < len(self._image_files):
-            file = self._image_files[self._image_files_idx]
-            self._image_files_idx += 1
+        if self._load_from_directory:
+            return self._next_from_directory()
+        elif self._load_from_video:
+            return self._next_from_video_file()
 
-            image = self._load_image(file)
-
-            return self._preprocess_image(image)
-
-        raise StopIteration
+        raise NotImplementedError()

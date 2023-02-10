@@ -12,23 +12,33 @@
             "console": "integratedTerminal",
             "justMyCode": false,
             "args": [
-                // "calibrate",
+                // "extract-calibration-images",
+                // "--camera",
+                // "qoocam-ego",
+                // "--input",
+                // "./data/water/qoocam/videos/calibration/0001_20230203_105536_01.mp4",
+                // "--output",
+                // "./data/water/qoocam/calibration/",
+                // "--prefix",
+                // "part1_"
+                // ---------------------
+                "calibrate",
+                "--display-error",
+                "--camera",
+                "qoocam-ego",
+                "--calibration-directory",
+                "./data/water/qoocam/calibration",
+                "--output",
+                "./calibration-output.dat"
+                // -----------------------
+                // "tune-disparity",
                 // "--display-error",
                 // "--camera",
                 // "qoocam-ego",
                 // "--calibration-directory",
                 // "./data/qoocam/calibration",
-                // "--output",
+                // "--calibration-tables",
                 // "./calibration-output.dat"
-                // -----------------------
-                "tune-disparity",
-                "--display-error",
-                "--camera",
-                "qoocam-ego",
-                "--calibration-directory",
-                "./data/qoocam/calibration",
-                "--calibration-tables",
-                "./calibration-output.dat"
             ]
         }
     ]

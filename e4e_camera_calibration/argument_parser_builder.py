@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 
-from cameras.factory import CAMERA_MAP, str2camera
-from cameras.camera import Camera
+from e4e_camera_calibration.cameras.factory import CAMERA_MAP, str2camera
+from e4e_camera_calibration.cameras.camera import Camera
 
 
 class ParsedArguments:
@@ -79,6 +79,7 @@ class ArgumentParserBuilder:
         return self
 
     def parse_args(self, args: Namespace):
+        camera = None
         if hasattr(args, "camera"):
             camera = str2camera(
                 args.camera, name=args.camera_name, serial_number=args.serial_number

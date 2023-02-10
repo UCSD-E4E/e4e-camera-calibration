@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-from cameras.calibrated_stereo_camera import CalibratedStereoCamera
+from e4e_camera_calibration.cameras.calibrated_stereo_camera import CalibratedStereoCamera
 
 
 class DisparityBase(ABC):
