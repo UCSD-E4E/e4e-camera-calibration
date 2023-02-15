@@ -113,7 +113,7 @@ class CalibratedStereoCamera(CalibratedCameraBase, StereoCamera):
             )
 
         error, self._stereo_R, self._stereo_T = self._stereo_calibration(
-            left, right, rows, columns, square_size
+            left, right, rows, columns, square_size, max_error=max_error
         )
 
         if display_calibration_error:

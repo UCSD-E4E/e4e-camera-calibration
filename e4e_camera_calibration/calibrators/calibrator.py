@@ -114,6 +114,9 @@ class Calibrator(ABC):
         next_idx = min(next_idx, max_idx)
         next_idx = max(min_idx, next_idx)
 
+        if next_idx >= max_idx:
+            return max_idx
+
         if self._is_valid_calibration_image(self._camera.at(next_idx), rows, columns):
             if not _first_pass:
                 return next_idx

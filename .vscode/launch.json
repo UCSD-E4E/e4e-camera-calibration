@@ -36,7 +36,7 @@
                 // "--camera",
                 // "qoocam-ego",
                 // "--calibration-directory",
-                // "./data/qoocam/calibration",
+                // "./data/air/qoocam/calibration",
                 // "--calibration-tables",
                 // "./calibration-output.dat"
             ]

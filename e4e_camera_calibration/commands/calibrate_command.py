@@ -41,7 +41,7 @@ class CalibrateCommand(CliCommand):
             "-m",
             "--max-error",
             type=int,
-            default=0.6,
+            default=0.7,
             help="The maximum calibration error allowed.",
         )
 

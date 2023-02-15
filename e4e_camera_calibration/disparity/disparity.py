@@ -7,7 +7,9 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-from e4e_camera_calibration.cameras.calibrated_stereo_camera import CalibratedStereoCamera
+from e4e_camera_calibration.cameras.calibrated_stereo_camera import (
+    CalibratedStereoCamera,
+)
 
 
 class DisparityBase(ABC):
@@ -32,6 +34,9 @@ class DisparityBase(ABC):
         self._calibrated_camera.load(calibration_directory)
 
         left_images, right_images = zip(*self._calibrated_camera)
+
+        left_images = [left_images[0]]
+        right_images = [right_images[0]]
 
         line_segments_collection = []
         for left in left_images:
@@ -84,6 +89,8 @@ class DisparityBase(ABC):
         display_calibration_error: bool,
     ):
         for idx in known_idx:
+            print(idx)
+
             errors = []
 
             array = X[idx, :]
@@ -108,7 +115,7 @@ class DisparityBase(ABC):
                 self._prev_min_error = error
 
                 np.save("disparity-parameters.npy", array)
-                plt.imshow(disparity)
+                cv2.imwrite("disparity-image.png", array)
 
             if error == 0:
                 y[idx, 0] = 0
@@ -123,13 +130,10 @@ class DisparityBase(ABC):
         errors = []
 
         for line_segment in line_segments:
-            if len(line_segment) != 2:
-                continue
-
             point1 = self._get_point(depth, line_segment[0])
             point2 = self._get_point(depth, line_segment[1])
 
-            dist = np.linalg.norm(point1 - point2)
+            dist = np.linalg.norm(point1 - point2) ** 2
             errors.append(square_size - dist)
 
         return errors
@@ -153,7 +157,7 @@ class DisparityBase(ABC):
 
         return (a, b, c, d)
 
-    def _get_point(self, depth: np.ndarray, point: np.ndarray): # TOOD
+    def _get_point(self, depth: np.ndarray, point: np.ndarray):  # TOOD
         # floor_point = np.floor(point).astype(int)
         # ceil_point = np.ceil(point).astype(int)
 
@@ -198,25 +202,31 @@ class DisparityBase(ABC):
 
         return corners[:, 0, :]
 
+    def _test(self, arr):
+        if arr.shape == 1:
+            raise NotImplementedError()
+
+        return arr
+
     def _get_line_segments(self, points: List[np.ndarray], rows: int, columns: int):
         lines = []
-        for r in range(rows):
-            line_points = points[r * columns : (r + 1) * columns, :]
+        for c in range(columns):
+            line_points = points[c * rows : (c + 1) * rows, :]
             lines.append(line_points)
 
-        for line in lines: # TODO Bug? Should be rows?
-            for i in range(0, columns, 2):
-                yield line[i : i + 2]
+        for line in lines:
+            for i in range(0, rows, 2):
+                yield self._test(line[i : i + 2])
 
-            for i in range(1, columns, 2):
-                yield line[i : i + 2]
+            for i in range(1, rows, 2):
+                yield self._test(line[i : i + 2])
 
         for i, line in enumerate(lines[:-1]):
             first_line = line
             second_line = lines[i + 1]
 
             for j, _ in enumerate(first_line):
-                yield [first_line[j], second_line[j]]
+                yield self._test(np.array([first_line[j], second_line[j]]))
 
     @abstractmethod
     def _get_inputs(self) -> np.ndarray:
