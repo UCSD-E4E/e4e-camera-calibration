@@ -44,7 +44,8 @@ class QoocamEgoStereoCamera(StereoCamera):
     def _seek_video_file(self, index: int):
         self._capture.set(cv2.CAP_PROP_POS_FRAMES, index)
 
-    def _write_image_file(self, image: Tuple[np.ndarray, np.ndarray], file_path: str):
+    def _write_image_file(self, image: Tuple[np.ndarray, np.ndarray], file_path: Path):
+        file_path = file_path.as_posix()
         file_path = f"{file_path}.png"
         left, right = image
         height, width, channels = left.shape

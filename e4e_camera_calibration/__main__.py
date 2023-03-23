@@ -42,7 +42,10 @@ class Cli:
             print(__version__)
         elif args.command:
             parsed_args = args.command.builder.parse_args(args)
-            args.command.execute(args, parsed_args)
+            exit_code = args.command.execute(args, parsed_args) or 0
+
+            if exit_code != 0:
+                exit(exit_code)
 
 
 Cli().execute()

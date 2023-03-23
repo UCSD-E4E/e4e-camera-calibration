@@ -26,10 +26,12 @@
                 "--display-error",
                 "--camera",
                 "qoocam-ego",
+                "--camera-name",
+                "qoocam1",
                 "--calibration-directory",
-                "./data/water/qoocam/calibration",
+                "./data/air/qoocam/qoocam1/images",
                 "--output",
-                "./calibration-output.dat"
+                "./data/air/qoocam/qoocam1/calibration-output.dat"
                 // -----------------------
                 // "tune-disparity",
                 // "--display-error",
@@ -38,7 +40,7 @@
                 // "--calibration-directory",
                 // "./data/air/qoocam/calibration",
                 // "--calibration-tables",
-                // "./calibration-output.dat"
+                // "./data/air/qoocam/qoocam1/calibration-output.dat"
             ]
         }
     ]

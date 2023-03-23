@@ -33,7 +33,9 @@ class CliCommand(ABC):
         self._set_parser(parser, self._builder)
 
     @abstractmethod
-    def execute(self, args: Namespace, parsed_arguments: ParsedArguments):
+    def execute(
+        self, args: Namespace, parsed_arguments: ParsedArguments
+    ) -> int or None:
         raise NotImplementedError()
 
     def _set_parser(self, parser: ArgumentParser, builder: ArgumentParserBuilder):

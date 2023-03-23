@@ -1,4 +1,5 @@
 from abc import ABC
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -14,17 +15,21 @@ class Calibrator(ABC):
 
     def generate_calibration_images(
         self, output_dir: str, prefix: str, rows=14, columns=10
-    ):
+    ) -> bool:
+        found_calibration_images: int = 0
         idx = 0
         prev_idx = idx
         with tqdm(total=self._camera.image_count) as progress:
             for image in self._camera:
                 if self._is_valid_calibration_image(image, rows, columns):
-                    self._camera._write_image_file(image, f"{output_dir}/{prefix}{idx}")
+                    self._camera._write_image_file(
+                        image, Path(output_dir, f"{prefix}{idx}")
+                    )
                     idx = self._search_next_different_image(
                         image, idx, self._camera.image_count - 1
                     )
                     self._camera.seek(idx)
+                    found_calibration_images = found_calibration_images + 1
                 else:
                     idx = self._search_next_calibration_image(
                         idx, self._camera.image_count - 1, rows, columns
@@ -37,6 +42,14 @@ class Calibrator(ABC):
                     break
 
                 prev_idx = idx
+
+        if found_calibration_images > 0:
+            with open(
+                Path(output_dir, f"{prefix}metadata.txt"), "w", encoding="utf8"
+            ) as file:
+                file.write(f"{found_calibration_images}\n")
+
+        return found_calibration_images > 0
 
     def _calculate_difference_score(self, image1: np.ndarray, image2: np.ndarray):
         return ssim(image1, image2, channel_axis=2)

@@ -23,11 +23,15 @@ class ExtractCalibrationImagesCommand(CliCommand):
     def name(self) -> str:
         return "extract-calibration-images"
 
-    def execute(self, args: Namespace, parsed_arguments: ParsedArguments):
+    def execute(
+        self, args: Namespace, parsed_arguments: ParsedArguments
+    ) -> int or None:
         # Prep the directory to receive the new calibration images.
         os.makedirs(args.output, exist_ok=True)
         for file in glob(f"{args.output}/{args.prefix}*.png"):
             os.unlink(file)
+        for file in glob(f"{args.output}/{args.prefix}metadata.txt"):
+            pass
 
         camera = parsed_arguments.camera
         camera.load(args.input)
@@ -38,7 +42,8 @@ class ExtractCalibrationImagesCommand(CliCommand):
         else:
             raise NotImplementedError()
 
-        calibrator.generate_calibration_images(args.output, args.prefix)
+        if not calibrator.generate_calibration_images(args.output, args.prefix):
+            return 1  # Return an error code indicating we failed.
 
     def _set_parser(self, parser: ArgumentParser, builder: ArgumentParserBuilder):
         builder.add_camera_parameters()

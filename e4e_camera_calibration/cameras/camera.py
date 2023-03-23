@@ -131,7 +131,7 @@ class Camera(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def _write_image_file(self, image: np.ndarray, file_path: str):
+    def _write_image_file(self, image: np.ndarray, file_path: Path):
         raise NotImplementedError()
 
     def __iter__(self):
