@@ -6,7 +6,7 @@ import numpy as np
 from skimage.metrics import structural_similarity as ssim
 from tqdm import tqdm
 
-from e4e_camera_calibration.cameras.camera import Camera
+from cameras.camera import Camera
 
 
 class Calibrator(ABC):

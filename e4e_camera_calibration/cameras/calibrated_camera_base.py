@@ -9,8 +9,8 @@ import tarfile
 import cv2
 import numpy as np
 
-from e4e_camera_calibration.cameras.camera import Camera
-from e4e_camera_calibration.cameras.stereo_camera import StereoCamera
+from cameras.camera import Camera
+from cameras.stereo_camera import StereoCamera
 
 
 class CalibratedCameraBase(Camera, ABC):

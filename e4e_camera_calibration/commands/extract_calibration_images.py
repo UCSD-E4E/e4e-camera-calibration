@@ -2,13 +2,13 @@ import os
 from argparse import ArgumentParser, Namespace
 from glob import glob
 
-from e4e_camera_calibration.argument_parser_builder import (
+from argument_parser_builder import (
     ArgumentParserBuilder,
     ParsedArguments,
 )
-from e4e_camera_calibration.calibrators.calibrator import Calibrator
-from e4e_camera_calibration.calibrators.stereo_calibrator import StereoCalibrator
-from e4e_camera_calibration.commands.cli_command import CliCommand
+from calibrators.calibrator import Calibrator
+from calibrators.stereo_calibrator import StereoCalibrator
+from commands.cli_command import CliCommand
 
 
 class ExtractCalibrationImagesCommand(CliCommand):

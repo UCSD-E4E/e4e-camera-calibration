@@ -1,5 +1,5 @@
 from abc import ABC
-from e4e_camera_calibration.cameras.camera import Camera
+from cameras.camera import Camera
 
 
 class StereoCamera(Camera, ABC):

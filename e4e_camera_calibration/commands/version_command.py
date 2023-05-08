@@ -1,6 +1,6 @@
 from argparse import Namespace
 from argument_parser_builder import ParsedArguments
-from e4e_camera_calibration.commands.cli_command import CliCommand
+from commands.cli_command import CliCommand
 
 from __init__ import __version__
 

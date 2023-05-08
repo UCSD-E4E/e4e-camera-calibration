@@ -2,8 +2,8 @@ from typing import Tuple
 
 import numpy as np
 
-from e4e_camera_calibration.calibrators.calibrator import Calibrator
-from e4e_camera_calibration.cameras.stereo_camera import StereoCamera
+from calibrators.calibrator import Calibrator
+from cameras.stereo_camera import StereoCamera
 
 
 class StereoCalibrator(Calibrator):

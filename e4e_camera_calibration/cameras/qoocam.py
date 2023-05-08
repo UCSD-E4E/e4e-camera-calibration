@@ -4,7 +4,7 @@ from typing import Tuple
 import cv2
 import numpy as np
 
-from e4e_camera_calibration.cameras.stereo_camera import StereoCamera
+from cameras.stereo_camera import StereoCamera
 
 
 class QoocamEgoStereoCamera(StereoCamera):
