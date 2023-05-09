@@ -8,6 +8,7 @@ from commands.extract_calibration_images import (
 )
 from commands.tune_disparity_command import TuneDisparityCommand
 from commands.version_command import VersionCommand
+from commands.rectify_images import RectifyImagesCommand
 
 
 class Cli:
@@ -29,6 +30,7 @@ class Cli:
         self._add_subparser(CalibrateCommand())
         self._add_subparser(TuneDisparityCommand())
         self._add_subparser(VersionCommand())
+        self._add_subparser(RectifyImagesCommand())
 
     def _add_subparser(self, command: CliCommand):
         subparser = self._subparsers.add_parser(command.name, help=command.help)

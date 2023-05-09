@@ -310,6 +310,12 @@ class CalibratedStereoCamera(CalibratedCameraBase, StereoCamera):
 
     def __next__(self):
         left, right = super().__next__()
+        
+        left_rect, right_rect = self.rectify_images(left,right)
+
+        return left_rect, right_rect
+
+    def rectify_images(self, left, right):
         left_rect = np.zeros_like(left)
         right_rect = np.zeros_like(right)
 
