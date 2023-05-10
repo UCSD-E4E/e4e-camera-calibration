@@ -12,3 +12,10 @@ This leverages Sherlock to perform a parameter search to choose the best paramet
 ```bash
 python ./e4e_camera_calibration tune-disparity  --display-error --camera qoocam-ego --calibration-directory ./data/qoocam/calibration --calibration-tables ./calibration-output.dat
 ```
+
+## Perform Stereo Rectification
+Automated stereo rectification of stereo image pairs. Current expected structure for data is that unrectified images will be stored in /data/<scene>/unrectified/ and script will store them at /data/<scene>/rectified/
+
+```bash
+python e4e_camera_calibration rectify-images --camera qoocam-ego --calibration-tables ./calibration-output.dat --dataset-dir /insert/datapath/here
+```
