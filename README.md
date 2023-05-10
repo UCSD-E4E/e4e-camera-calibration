@@ -14,7 +14,7 @@ python ./e4e_camera_calibration tune-disparity  --display-error --camera qoocam-
 ```
 
 ## Perform Stereo Rectification
-Automated stereo rectification of stereo image pairs. Current expected structure for data is that unrectified images will be stored in /data/<scene>/unrectified/ and script will store them at /data/scene_name/rectified/
+Automated stereo rectification of stereo image pairs. Current expected structure for data is that unrectified images (im0.png and im1.png) will be stored in /data/scene_name/unrectified/ and script will store them at /data/scene_name/rectified/.
 
 ```bash
 python e4e_camera_calibration rectify-images --camera qoocam-ego --calibration-tables ./calibration-output.dat --dataset-dir /insert/datapath/here
