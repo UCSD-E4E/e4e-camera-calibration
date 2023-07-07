@@ -106,7 +106,7 @@ class CalibratedMonoCamera(CalibratedCameraBase, MonoCamera):
     ):
         # left, right = list(zip(*self._camera))
 
-        images = list(*self._camera)
+        images = list(self._camera)
 
         # width = left[0].shape[1]
         # height = left[0].shape[0]

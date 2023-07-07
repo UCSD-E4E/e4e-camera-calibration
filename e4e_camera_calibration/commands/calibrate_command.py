@@ -43,7 +43,7 @@ class CalibrateCommand(CliCommand):
         # TODO
 
         if parsed_arguments.camera.number_of_sensors == 1:
-            calibrated_camera = CalibratedCameraBase(parsed_arguments.camera)
+            calibrated_camera = CalibratedMonoCamera(parsed_arguments.camera)
         else:
             raise ValueError(
                 f"Camera has {parsed_arguments.camera.number_of_sensors} sensors.  This is not currently supported."
