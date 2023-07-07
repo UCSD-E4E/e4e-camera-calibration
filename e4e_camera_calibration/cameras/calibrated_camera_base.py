@@ -50,6 +50,8 @@ class CalibratedCameraBase(Camera, ABC):
     ):
         raise NotImplementedError()
 
+    # WHY ISN'T THIS THROWING AN ERROR????
+    # The output of this function is a 3-tuple, not a 2-tuple
     def _calibrate_camera(
         self,
         images: Iterable[np.ndarray],
@@ -86,7 +88,6 @@ class CalibratedCameraBase(Camera, ABC):
             ret, corners = cv2.findChessboardCorners(gray, (rows, columns), None)
 
             if ret:
-
                 # Convolution size used to improve corner detection. Don't make this too large.
                 conv_size = (11, 11)
 
@@ -112,6 +113,7 @@ class CalibratedCameraBase(Camera, ABC):
                 f"While calibrating {camera_name}, an error of {error} was above the maximum allowed error of {max_error}."
             )
 
+        # huhhh
         return error, camera_matrix, distortion_coefficients
 
     def load(self, path: str):
