@@ -204,7 +204,7 @@ class CalibratedMonoCamera(CalibratedCameraBase, MonoCamera):
         # )
 
         self._add_numpy_array(
-            self.left_distortion_coefficients, "_distortion_coefficients.npy", file
+            self._distortion_coefficients, "_distortion_coefficients.npy", file
         )
         # self._add_numpy_array(self.stereo_R, "stereo_R.npy", file)
         # self._add_numpy_array(self.stereo_T, "stereo_T.npy", file)

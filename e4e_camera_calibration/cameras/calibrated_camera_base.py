@@ -5,6 +5,7 @@ from typing import Dict, Iterable, Tuple
 import io
 import json
 import tarfile
+from tqdm import tqdm
 
 import cv2
 import numpy as np
@@ -81,7 +82,7 @@ class CalibratedCameraBase(Camera, ABC):
         # coordinates of the checkerboard in checkerboard world space.
         objpoints = []  # 3d point in real world space
 
-        for frame in images:
+        for frame in tqdm(images):
             gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
 
             # find the checkerboard
