@@ -157,33 +157,12 @@ class CalibratedMonoCamera(CalibratedCameraBase, MonoCamera):
         # ) = self._rectify_stereo_cameras(width, height)
 
     def _load_calibration(self, file: tarfile.TarFile):
-        self._left_camera_matrix = self._read_numpy_array(
+        self._camera_matrix = self._read_numpy_array(
             file.extractfile("left_calibration_matrix.npy")
         )
-        self._right_camera_matrix = self._read_numpy_array(
-            file.extractfile("right_calibration_matrix.npy")
-        )
-        self._left_distortion_coefficients = self._read_numpy_array(
+        self._distortion_coefficients = self._read_numpy_array(
             file.extractfile("left_distortion_coefficients.npy")
         )
-        self._right_distortion_coefficients = self._read_numpy_array(
-            file.extractfile("right_distortion_coefficients.npy")
-        )
-        self._stereo_R = self._read_numpy_array(file.extractfile("stereo_R.npy"))
-        self._stereo_T = self._read_numpy_array(file.extractfile("stereo_T.npy"))
-        self._left_stereo_map_x = self._read_numpy_array(
-            file.extractfile("left_stereo_map_x.npy")
-        )
-        self._left_stereo_map_y = self._read_numpy_array(
-            file.extractfile("left_stereo_map_y.npy")
-        )
-        self._right_stereo_map_x = self._read_numpy_array(
-            file.extractfile("right_stereo_map_x.npy")
-        )
-        self._right_stereo_map_y = self._read_numpy_array(
-            file.extractfile("right_stereo_map_y.npy")
-        )
-        self._Q = self._read_numpy_array(file.extractfile("Q.npy"))
 
     def _save_calibration(self, file: tarfile.TarFile):
         # self._add_numpy_array(
