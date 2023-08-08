@@ -208,3 +208,4 @@ poetry.toml
 
 data/
 *.dat
+*.pkg

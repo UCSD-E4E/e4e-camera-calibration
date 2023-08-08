@@ -114,7 +114,7 @@ class CalibratedCameraBase(Camera, ABC):
         print(f"Starting finding checkerboard with {cpu_count()} threads.")
         with Pool(processes=cpu_count()) as pool:
             # frame, rows, columns, square_size = args
-            results = pool.map(do_work, [(img, rows, columns, square_size) for img in images])
+            results = list(tqdm(pool.imap(do_work, [(img, rows, columns, square_size) for img in images]), total=len(images)))
             results = [(objp, corners) for objp, corners in results if objp is not None and corners is not None]
 
             for objp, corners in results:
