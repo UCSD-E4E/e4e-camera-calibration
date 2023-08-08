@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 import math
 
-from sherlock import Sherlock
+# from sherlock import Sherlock
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
